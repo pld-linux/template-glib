@@ -1,11 +1,11 @@
 Summary:	template-glib - generate text based on a template and user defined state
 Name:		template-glib
-Version:	3.28.0
+Version:	3.30.0
 Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/template-glib/3.28/%{name}-%{version}.tar.xz
-# Source0-md5:	bae97336986704ba4f3b4921bd3cd5b3
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/template-glib/3.30/%{name}-%{version}.tar.xz
+# Source0-md5:	46bc1ae19f4d50db882e7686315257f5
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	gettext-tools >= 0.18
 BuildRequires:	glib2-devel >= 1:2.44.0
