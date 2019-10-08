@@ -1,19 +1,29 @@
+#
+# Conditional build:
+%bcond_without	apidocs		# API documentation
+%bcond_without	static_libs	# static library
+
 Summary:	template-glib - generate text based on a template and user defined state
+Summary(pl.UTF-8):	template-glib - generowanie tekstu w oparciu o szablon i stan przekazany przez użytkownika
 Name:		template-glib
-Version:	3.30.0
-Release:	2
+Version:	3.34.0
+Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/template-glib/3.30/%{name}-%{version}.tar.xz
-# Source0-md5:	46bc1ae19f4d50db882e7686315257f5
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/template-glib/3.34/%{name}-%{version}.tar.xz
+# Source0-md5:	78a64d7c6324ed2dec0b8088428d6774
+URL:		https://gitlab.gnome.org/GNOME/template-glib
+BuildRequires:	bison
 BuildRequires:	docbook-dtd412-xml
 BuildRequires:	gettext-tools >= 0.18
+BuildRequires:	flex
 BuildRequires:	glib2-devel >= 1:2.44.0
 BuildRequires:	gobject-introspection-devel >= 0.9.5
-BuildRequires:	gtk-doc >= 1.20
-BuildRequires:	meson >= 0.40.1
+%{?with_apidocs:BuildRequires:	gtk-doc >= 1.20}
+BuildRequires:	meson >= 0.50.0
+BuildRequires:	ninja >= 1.5
 BuildRequires:	pkgconfig
-BuildRequires:	rpmbuild(macros) >= 1.726
+BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	vala
 Requires:	glib2 >= 1:2.44.0
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -25,8 +35,16 @@ runtime, so it is safe to use from any GObject-Introspectable
 language.
 
 Template-GLib allows you to access properties on GObjects as well as
-call simple methods via GObject-Introspection. See our examples for
-how to call methods.
+call simple methods via GObject-Introspection.
+
+%description -l pl.UTF-8
+Template-GLib to biblioteka pomagająca generować tekst w oparciu o
+szablon oraz stan przekazany przez użytkownika. Nie wykorzystuje
+bibliotek językowych, więc bezpiecznie można jej używać z dowolnego
+języka obsługującego GObject-Introspection.
+
+Template-GLib pozwala na dostęp do właściwości obiektów GObject, a
+także wywoływanie prostych metod poprzez GObject-Introspection.
 
 %package devel
 Summary:	Header files for the template-glib library
@@ -34,12 +52,25 @@ Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki template-glib
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	glib2-devel >= 1:2.44.0
+Requires:	gobject-introspection-devel >= 0.9.5
 
 %description devel
 Header files for the template-glib library.
 
 %description devel -l pl.UTF-8
 Pliki nagłówkowe biblioteki template-glib.
+
+%package static
+Summary:	Static template-glib library
+Summary(pl.UTF-8):	Biblioteka statyczna template-glib
+Group:		Development/Libraries
+Requires:	%{name}-devel = %{version}-%{release}
+
+%description static
+Static template-glib library.
+
+%description static -l pl.UTF-8
+Biblioteka statyczna template-glib.
 
 %package apidocs
 Summary:	template-glib API documentation
@@ -77,15 +108,16 @@ API template-glib dla języka Vala.
 
 %build
 %meson build \
+	%{!?with_static_libs:--default-library=shared} \
 	-Dintrospection=true \
-	-Denable_gtk_doc=true
+	%{?with_apidocs:-Denable_gtk_doc=true}
 
-%meson_build -C build
+%ninja_build -C build
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%meson_install -C build
+%ninja_install -C build
 
 %find_lang %{name} --with-gnome
 
@@ -97,7 +129,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc NEWS README.md
+%doc AUTHORS NEWS README.md
 %attr(755,root,root) %{_libdir}/libtemplate_glib-1.0.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libtemplate_glib-1.0.so.0
 %{_libdir}/girepository-1.0/Template-1.0.typelib
@@ -109,9 +141,17 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/template-glib-1.0
 %{_pkgconfigdir}/template-glib-1.0.pc
 
+%if %{with static_libs}
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/libtemplate_glib-1.0.a
+%endif
+
+%if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
 %{_gtkdocdir}/template-glib
+%endif
 
 %files -n vala-template-glib
 %defattr(644,root,root,755)
