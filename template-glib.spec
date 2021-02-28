@@ -77,9 +77,7 @@ Summary:	template-glib API documentation
 Summary(pl.UTF-8):	Dokumentacja API template-glib
 Group:		Documentation
 Requires:	gtk-doc-common
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description apidocs
 Template-glib API documentation.
@@ -93,9 +91,7 @@ Summary(pl.UTF-8):	API template-glib dla języka Vala
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 Requires:	vala >= 2:0.18.0
-%if "%{_rpmversion}" >= "5"
 BuildArch:	noarch
-%endif
 
 %description -n vala-template-glib
 Template-glib API for Vala language.
