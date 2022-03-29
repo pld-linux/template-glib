@@ -6,12 +6,12 @@
 Summary:	template-glib - generate text based on a template and user defined state
 Summary(pl.UTF-8):	template-glib - generowanie tekstu w oparciu o szablon i stan przekazany przez użytkownika
 Name:		template-glib
-Version:	3.34.0
+Version:	3.34.1
 Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/template-glib/3.34/%{name}-%{version}.tar.xz
-# Source0-md5:	78a64d7c6324ed2dec0b8088428d6774
+Source0:	https://download.gnome.org/sources/template-glib/3.34/%{name}-%{version}.tar.xz
+# Source0-md5:	df120adac6faec85aedda693a7ffa518
 URL:		https://gitlab.gnome.org/GNOME/template-glib
 BuildRequires:	bison
 BuildRequires:	docbook-dtd412-xml
@@ -23,6 +23,7 @@ BuildRequires:	gobject-introspection-devel >= 0.9.5
 BuildRequires:	meson >= 0.50.0
 BuildRequires:	ninja >= 1.5
 BuildRequires:	pkgconfig
+BuildRequires:	rpm-build >= 4.6
 BuildRequires:	rpmbuild(macros) >= 1.736
 BuildRequires:	vala
 Requires:	glib2 >= 1:2.44.0
@@ -105,7 +106,6 @@ API template-glib dla języka Vala.
 %build
 %meson build \
 	%{!?with_static_libs:--default-library=shared} \
-	-Dintrospection=true \
 	%{?with_apidocs:-Denable_gtk_doc=true}
 
 %ninja_build -C build
