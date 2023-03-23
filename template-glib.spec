@@ -6,12 +6,12 @@
 Summary:	template-glib - generate text based on a template and user defined state
 Summary(pl.UTF-8):	template-glib - generowanie tekstu w oparciu o szablon i stan przekazany przez użytkownika
 Name:		template-glib
-Version:	3.36.0
+Version:	3.36.1
 Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
 Source0:	https://download.gnome.org/sources/template-glib/3.36/%{name}-%{version}.tar.xz
-# Source0-md5:	809740d6b4834f0ffe9d42e0f4815a79
+# Source0-md5:	2ebcb42978166a8a8acae9ca57808259
 URL:		https://gitlab.gnome.org/GNOME/template-glib
 BuildRequires:	bison
 BuildRequires:	docbook-dtd412-xml
