@@ -6,12 +6,12 @@
 Summary:	template-glib - generate text based on a template and user defined state
 Summary(pl.UTF-8):	template-glib - generowanie tekstu w oparciu o szablon i stan przekazany przez użytkownika
 Name:		template-glib
-Version:	3.36.3
+Version:	3.38.0
 Release:	1
 License:	LGPL v2.1+
 Group:		Libraries
-Source0:	https://download.gnome.org/sources/template-glib/3.36/%{name}-%{version}.tar.xz
-# Source0-md5:	a0031be2e974f85c97cb963b51f5988d
+Source0:	https://download.gnome.org/sources/template-glib/3.38/%{name}-%{version}.tar.xz
+# Source0-md5:	baa19c823155cc38693b9297a62bb0ec
 URL:		https://gitlab.gnome.org/GNOME/template-glib
 BuildRequires:	bison
 BuildRequires:	docbook-dtd412-xml
@@ -19,7 +19,7 @@ BuildRequires:	gettext-tools >= 0.18
 BuildRequires:	flex
 BuildRequires:	glib2-devel >= 1:2.44.0
 BuildRequires:	gobject-introspection-devel >= 0.9.5
-%{?with_apidocs:BuildRequires:	gtk-doc >= 1.20}
+%{?with_apidocs:BuildRequires:	gi-docgen}
 BuildRequires:	meson >= 0.51.0
 BuildRequires:	ninja >= 1.5
 BuildRequires:	pkgconfig
@@ -106,7 +106,7 @@ API template-glib dla języka Vala.
 %build
 %meson \
 	%{!?with_static_libs:--default-library=shared} \
-	%{?with_apidocs:-Dgtk_doc=true} \
+	%{?with_apidocs:-Ddocs=true} \
 	-Dintrospection=enabled
 
 %meson_build
@@ -115,6 +115,11 @@ API template-glib dla języka Vala.
 rm -rf $RPM_BUILD_ROOT
 
 %meson_install
+
+%if %{with apidocs}
+install -d $RPM_BUILD_ROOT%{_gidocdir}
+%{__mv} $RPM_BUILD_ROOT%{_docdir}/template-glib-1.0 $RPM_BUILD_ROOT%{_gidocdir}
+%endif
 
 %find_lang %{name} --with-gnome
 
@@ -126,14 +131,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc AUTHORS NEWS README.md
+%doc NEWS README.md
 %attr(755,root,root) %{_libdir}/libtemplate_glib-1.0.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libtemplate_glib-1.0.so.0
+%ghost %{_libdir}/libtemplate_glib-1.0.so.0
 %{_libdir}/girepository-1.0/Template-1.0.typelib
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libtemplate_glib-1.0.so
+%{_libdir}/libtemplate_glib-1.0.so
 %{_datadir}/gir-1.0/Template-1.0.gir
 %{_includedir}/template-glib-1.0
 %{_pkgconfigdir}/template-glib-1.0.pc
@@ -147,7 +152,7 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with apidocs}
 %files apidocs
 %defattr(644,root,root,755)
-%{_gtkdocdir}/template-glib
+%{_gidocdir}/template-glib-1.0
 %endif
 
 %files -n vala-template-glib
